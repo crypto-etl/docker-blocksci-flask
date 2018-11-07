@@ -114,7 +114,7 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_block_time(cls, _block_time):
-        return _block_time.replace(tzinfo=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
+        return _block_time.replace(tzinfo=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %z')
 
     @classmethod
     def serialize_fee_per_byte(cls, _method):
@@ -167,7 +167,6 @@ class BlockSerializer(BaseSerializer):
         'version',
         'virtual_size',
         'weight',
-#        'miner',        
     )
     
     @classmethod    
@@ -176,11 +175,7 @@ class BlockSerializer(BaseSerializer):
 
     @classmethod
     def serialize_time(cls, _time):
-        return _time.replace(tzinfo=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')
-
-    @classmethod
-    def serialize_miner(cls, _method):
-        return _method
+        return _time.replace(tzinfo=timezone.utc).strftime('%Y-%m-%d %H:%M:%S %z')
 
     @classmethod
     def serialize_coinbase_tx(cls, _coinbase_tx):
