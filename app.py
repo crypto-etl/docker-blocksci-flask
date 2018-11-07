@@ -51,6 +51,3 @@ def serve_block_list():
 @app.route('/transactions', methods=['GET'])
 def serve_transaction():
     pass
-
-
-if __init__
