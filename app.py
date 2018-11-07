@@ -15,7 +15,7 @@ def get_blockrange(start, end):
     if start.isdigit() and end.isdigit():
         start, end = int(start), int(end)
         blocks = blockchain[start:end]
-    elif isinstance(start, str) and isinstance(end, (str, None)):
+    elif isinstance(start, str) and isinstance(end, str):
         blocks = blockchain.range(start=start, end=end)
     else:
         raise ValueError('Allowed Values for `start` and `end` are `integers` and `date strings`')
