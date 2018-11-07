@@ -1,5 +1,6 @@
+import json
 from datetime import datetime
-from flask import Flask
+from flask import Flask, Response
 
 import blocksci
 from serializer import BlockSerializer
@@ -26,9 +27,11 @@ def get_blockrange(start, end):
 def serve_block(height):
     try:
         block = blockchain[height]
-        return {'data': BlockSerializer.serialize(block)}
+        response = {'data': BlockSerializer.serialize(block)}
     except:
-        return {'data': 'Invalid argument: Block Height (only int & <max(block_height))'}
+        response = {'data': 'Invalid argument: Block Height (only int & <max(block_height))'}
+    finally:
+        return json.dumps(response), 200, 'application/json'
 
 
 @app.route('/block/list', methods=['GET'])
@@ -36,13 +39,16 @@ def serve_block_list():
     start, end = request.values.get('start'), request.values.get('end')
 
     if start is None or end is None:
-        return {'data': '`start` and `end` arguments must be passed in request data'}
+        response = {'data': '`start` and `end` arguments must be passed in request data'}
+        return json.dumps(response), 200, 'application/json'
     
     try:
         blocks = get_blockrange(start=start, end=end)
     except ValueError as e:
-        return {'data': e.message}
-    return {'data': [BlockSerializer.serialize(_block) for _block in blocks]}
+        return json.dumps({'data': e.message}), 200, 'application/json'
+
+    response = {'data': [BlockSerializer.serialize(_block) for _block in blocks]}
+    return json.dumps(response), 200, 'application/json'
 
 
 @app.route('/transactions', methods=['GET'])
