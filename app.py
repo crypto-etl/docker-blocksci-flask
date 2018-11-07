@@ -1,6 +1,4 @@
 from datetime import datetime
-
-from djchoices import ChoiceItem, DjangoChoice
 from flask import Flask, jsonify
 
 import blocksci
