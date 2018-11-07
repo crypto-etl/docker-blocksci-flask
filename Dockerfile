@@ -2,6 +2,9 @@
 FROM merklescience/docker-blocksci 
 MAINTAINER Nirmal AK <nirmal@merklescience.com>
 
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
 RUN mkdir /app
 
 COPY . /app
