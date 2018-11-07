@@ -25,8 +25,9 @@ def get_blockrange(start, end):
 @app.route('/block/<height>', methods=['GET'])
 def serve_block(height):
     try:
-        block = blockchain[height]
-        return jsonify(data=BlockSerializer.serialize(block))
+        with app.app_context():
+            block = blockchain[height]        
+            return jsonify(data=BlockSerializer.serialize(block))
     except:
         return jsonify(data='Invalid argument: Block Height (only int & < max_block_height)')
 
@@ -37,12 +38,13 @@ def serve_block_list():
 
     if start is None or end is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
-    
-    try:
-        blocks = get_blockrange(start=start, end=end)
-    except ValueError as e:
-        return jsonify(data=e.message)
-    return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
+
+    with app.app_context():    
+        try:
+            blocks = get_blockrange(start=start, end=end)
+        except ValueError as e:
+            return jsonify(data=e.message)
+        return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
 
 
 @app.route('/transactions', methods=['GET'])
