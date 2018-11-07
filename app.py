@@ -31,7 +31,7 @@ def serve_block(height):
     except:
         response = {'data': 'Invalid argument: Block Height (only int & <max(block_height))'}
     finally:
-        return json.dumps(response)
+        return json.dumps(response), 200
 
 
 @app.route('/block/list', methods=['GET'])
@@ -40,15 +40,15 @@ def serve_block_list():
 
     if start is None or end is None:
         response = {'data': '`start` and `end` arguments must be passed in request data'}
-        return json.dumps(response)
+        return json.dumps(response), 200
     
     try:
         blocks = get_blockrange(start=start, end=end)
     except ValueError as e:
-        return json.dumps({'data': e.message})
+        return json.dumps({'data': e.message}), 200
 
     response = {'data': [BlockSerializer.serialize(_block) for _block in blocks]}
-    return json.dumps(response)
+    return json.dumps(response), 200
 
 
 @app.route('/transactions/<transaction_hash>', methods=['GET'])
