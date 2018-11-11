@@ -31,8 +31,8 @@ class BaseSerializer(object):
                                       blocksci.address_type.pubkeyhash,
                                       blocksci.address_type.witness_pubkeyhash,
                                       blocksci.address_type.scripthash,
-                                      blocksci.address_type.witness_scripthash,
-                                      )):
+                                      blocksci.address_type.witness_scripthash
+                                      ):
             return str(_address.address_string)
         elif _address.address_type == blocksci.address_type.multisig:
             return [str(_add.address_string) for _add in _address.addresses]
