@@ -1,8 +1,10 @@
 from datetime import timezone
 
+import blocksci
+
 
 class BaseSerializer(object):
-    
+
     @property
     def attributes(cls):
         raise NotImplementedError
@@ -11,15 +13,33 @@ class BaseSerializer(object):
     def serialize_default(cls, field):
         return field
 
-    @classmethod        
+    @classmethod
     def serialize(cls, obj):
         payload = dict()
-        
+
         for attribute in cls.attributes:
             serializer_method_name = 'serialize_{attribute}'.format(attribute=attribute)
             serializer_method = getattr(cls, serializer_method_name, cls.serialize_default)
             payload[attribute] = serializer_method(getattr(obj, attribute, None))
         return payload
+
+    @classmethod
+    def serialize_address(cls, _address):
+        if isinstance(_address, (blocksci.PubkeyAddress,
+                                blocksci.PubkeyHashAddress,
+                                blocksci.WitnessPubkeyHashAddress,
+                                blocksci.ScriptHashAddress,
+                                blocksci.WitnessScriptHashAddress,
+                                )):
+            return str(_address.address_string)
+        elif isinstance(_address, blocksci.MultisigAddress):
+            return [str(_add.address_string) for _add in _address.addresses]
+        else:
+            return None
+
+    @classmethod
+    def serialize_address_type(cls, _address_type):
+        return str(_address_type)
 
 
 class TransactionInputOutputSerializer(BaseSerializer):
@@ -27,7 +47,7 @@ class TransactionInputOutputSerializer(BaseSerializer):
     Converts a blocksci.Input or blocksci.Output object to a dictionary.
     All fields available in a Input/Output instance are available on the returned dictionary
 
-    Field definitions can be found at 
+    Field definitions can be found at
     https://citp.github.io/BlockSci/reference/chain/input.html
     https://citp.github.io/BlockSci/reference/chain/output.html
     """
@@ -53,19 +73,11 @@ class TransactionInputOutputSerializer(BaseSerializer):
         return _block.height
 
     @classmethod
-    def serialize_address(cls, _address):
-        return str(_address.address_string)
-
-    @classmethod
-    def serialize_address_type(cls, _address_type):
-        return str(_address_type)
-
-    @classmethod
     def serialize_tx(cls, _tx):
         return str(_tx.hash)
 
     @classmethod
-    def serialize_spent_tx(cls, _spent_tx):        
+    def serialize_spent_tx(cls, _spent_tx):
         return str(_spent_tx.hash) if _spent_tx else None
 
     @classmethod
@@ -83,7 +95,7 @@ class TransactionSerializer(BaseSerializer):
     """
     Converts a blocksci.Tx object to a dictionary.
 
-    All fields available in a Tx instance (except include_output_of_type, outs, 
+    All fields available in a Tx instance (except include_output_of_type, outs,
     ins, time_seen, block and observed_in_mempool) are available on the returned dictionary
 
     Field definitions can be found at https://citp.github.io/BlockSci/reference/chain/tx.html
@@ -119,16 +131,16 @@ class TransactionSerializer(BaseSerializer):
     @classmethod
     def serialize_fee_per_byte(cls, _method):
         return _method()
-    
+
     @classmethod
     def serialize_inputs(cls, _inputs):
         return [TransactionInputOutputSerializer.serialize(_input) for _input in _inputs]
-    
+
     @classmethod
     def serialize_outputs(cls, _outputs):
         return [TransactionInputOutputSerializer.serialize(_output) for _output in _outputs]
-    
-    @classmethod    
+
+    @classmethod
     def serialize_hash(cls, _hash):
         return str(_hash)
 
@@ -137,12 +149,12 @@ class BlockSerializer(BaseSerializer):
     """
     Converts a blocksci.Block object to a dictionary.
 
-    All fields available in a block instance (except time_seen, next_block, prev_block 
+    All fields available in a block instance (except time_seen, next_block, prev_block
     , inputs, outputs, miner and net_full_type_value) are available on the returned dictionary
 
     Field definitions can be found at https://citp.github.io/BlockSci/reference/chain/block.html
     """
-    
+
     attributes = (
         'base_size',
         'bits',
@@ -168,8 +180,8 @@ class BlockSerializer(BaseSerializer):
         'virtual_size',
         'weight',
     )
-    
-    @classmethod    
+
+    @classmethod
     def serialize_hash(cls, _hash):
         return str(_hash)
 
