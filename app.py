@@ -124,7 +124,10 @@ def serve_block_list():
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
     try:
-        data = requests.get('/block/list', body={'start': start, 'end': end})
-        return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
+        blocks = get_blockrange(start=start, end=end)
+        serialized_blocks = [BlockSerializer.serialize(_block) for _block in blocks])
+        txes = [_serialized_block.txes for _serialized_block in serialized_blocks for _tx in _serialized_block.txes]
+        # 2 for loops are present in order to flatten list of list to a list
+        return jsonify(data=txes)
     except (IndexError, ValueError) as e:
         return jsonify(data=str(e))
