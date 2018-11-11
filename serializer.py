@@ -165,6 +165,10 @@ class TransactionSerializer(BaseSerializer):
     def serialize_hash(cls, _hash):
         return str(_hash)
 
+    @classmethod
+    def serialize_op_return(cls, _op_return):
+        return TransactionOutputSerializer.serialize(_op_return) if _op_return else None
+
 
 class BlockSerializer(BaseSerializer):
     """
