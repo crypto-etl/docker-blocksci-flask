@@ -134,7 +134,7 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_change_output(cls, _change_output):
-        return TransactionInputOutputSerializer.serialize(_change_output)
+        return TransactionInputOutputSerializer.serialize(_change_output) if _change_output else None
 
     @classmethod
     def serialize_inputs(cls, _inputs):
