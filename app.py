@@ -105,7 +105,7 @@ def serve_transaction(_hash):
 
 
 @app.route('/transaction/list', methods=['GET'])
-def serve_block_list():
+def serve_transaction_list():
     """
     returns a list of json serialized blocksci.Tx objects
 
