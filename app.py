@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime
 from flask import Flask, jsonify, request
@@ -6,8 +7,13 @@ import blocksci
 from serializer import BlockSerializer, TransactionSerializer
 
 
-blockchain = blocksci.Blockchain('/blocksci/blocksci-parser/')
+API_ENDPOINT_BLOCK = '/block/<height>'
+API_ENDPOINT_BLOCK_LIST = '/block/list'
+API_ENDPOINT_TRANSACTION = '/transaction/<_hash>'
+API_ENDPOINT_TRANSACTION_LIST = '/transaction/list'
+BLOCKSCI_PARSER_FILES_LOC = os.getenv('BLOCKSCI_PARSER_FILES_LOC')
 
+blockchain = blocksci.Blockchain(BLOCKSCI_PARSER_FILES_LOC)
 
 app = Flask(__name__)
 
@@ -34,7 +40,7 @@ def get_blockrange(start, end):
     return blocks
 
 
-@app.route('/block/<height>', methods=['GET'])
+@app.route(API_ENDPOINT_BLOCK, methods=['GET'])
 def serve_block(height):
     """
     returns a json serialized blocksci.Block object
@@ -56,7 +62,7 @@ def serve_block(height):
     return jsonify(data=BlockSerializer.serialize(block))
 
 
-@app.route('/block/list', methods=['GET'])
+@app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
 def serve_block_list():
     """
     returns a list of json serialized blocksci.Block objects
@@ -82,7 +88,7 @@ def serve_block_list():
         return jsonify(data=str(e))
 
 
-@app.route('/transaction/<_hash>', methods=['GET'])
+@app.route(API_ENDPOINT_TRANSACTION, methods=['GET'])
 def serve_transaction(_hash):
     """
     returns a json serialized blocksci.Tx object
@@ -104,7 +110,7 @@ def serve_transaction(_hash):
         return jsonify(data=str(e))
 
 
-@app.route('/transaction/list', methods=['GET'])
+@app.route(API_ENDPOINT_TRANSACTION_LIST, methods=['GET'])
 def serve_transaction_list():
     """
     returns a list of json serialized blocksci.Tx objects
