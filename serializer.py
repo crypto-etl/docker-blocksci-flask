@@ -25,7 +25,7 @@ class BaseSerializer(object):
 
     @classmethod
     def serialize_address(cls, _address):
-        if _address.address_type == blocksci.address_type.nulldata:
+        if _address.type == blocksci.address_type.nulldata:
             return
         elif isinstance(_address, (blocksci.PubkeyAddress,
                                   blocksci.PubkeyHashAddress,
