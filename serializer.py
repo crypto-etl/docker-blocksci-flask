@@ -42,31 +42,7 @@ class BaseSerializer(object):
         return str(_address_type)
 
 
-class TransactionInputOutputSerializer(BaseSerializer):
-    """
-    Converts a blocksci.Input or blocksci.Output object to a dictionary.
-    All fields available in a Input/Output instance are available on the returned dictionary
-
-    Field definitions can be found at
-    https://citp.github.io/BlockSci/reference/chain/input.html
-    https://citp.github.io/BlockSci/reference/chain/output.html
-    """
-
-    attributes = (
-        'address',
-        'address_type',
-        'age',
-        'block',
-        'index',
-        'sequence_num',
-        'spent_tx_index',
-        'tx',
-        'tx_index',
-        'value',
-        'spent_tx',
-        'spending_tx',
-        'spending_tx_index',
-    )
+class BaseTransactionInputOutputSerializer(BaseSerializer):
 
     @classmethod
     def serialize_block(cls, _block):
@@ -77,18 +53,57 @@ class TransactionInputOutputSerializer(BaseSerializer):
         return str(_tx.hash)
 
     @classmethod
+    def serialize(cls, obj):
+        payload = super().serialize(obj)
+        payload['type'] = 'tx-output' if isinstance(obj, blocksci.Output) else 'tx-input'
+        return payload
+
+
+class TransactionInputSerializer(BaseTransactionInputOutputSerializer):
+    """
+    Converts a blocksci.Input or blocksci.Output object to a dictionary.
+
+    Field definitions can be found at
+    https://citp.github.io/BlockSci/reference/chain/input.html
+    """
+
+    attributes = (
+        'address',
+        'address_type',
+        'age',
+        'block',
+        'sequence_num',
+        'spent_tx',
+        'tx',
+        'value',
+    )
+
+    @classmethod
     def serialize_spent_tx(cls, _spent_tx):
         return str(_spent_tx.hash) if _spent_tx else None
+
+
+class TransactionOutputSerializer(BaseTransactionInputOutputSerializer):
+    """
+    Converts a blocksci.Input or blocksci.Output object to a dictionary.
+
+    Field definitions can be found at
+    https://citp.github.io/BlockSci/reference/chain/output.html
+    """
+
+    attributes = (
+        'address',
+        'address_type',
+        'block',
+        'is_spent',
+        'spending_tx',
+        'tx',
+        'value',
+    )
 
     @classmethod
     def serialize_spending_tx(cls, _spending_tx):
         return str(_spending_tx.hash) if _spending_tx else None
-
-    @classmethod
-    def serialize(cls, obj):
-        payload = super().serialize(obj)
-        payload['type'] = 'tx-output' if payload['spent_tx'] is None else 'tx-input'
-        return payload
 
 
 class TransactionSerializer(BaseSerializer):
@@ -134,15 +149,15 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_change_output(cls, _change_output):
-        return TransactionInputOutputSerializer.serialize(_change_output) if _change_output else None
+        return TransactionOutputSerializer.serialize(_change_output) if _change_output else None
 
     @classmethod
     def serialize_inputs(cls, _inputs):
-        return [TransactionInputOutputSerializer.serialize(_input) for _input in _inputs]
+        return [TransactionInputSerializer.serialize(_input) for _input in _inputs]
 
     @classmethod
     def serialize_outputs(cls, _outputs):
-        return [TransactionInputOutputSerializer.serialize(_output) for _output in _outputs]
+        return [TransactionOutputSerializer.serialize(_output) for _output in _outputs]
 
     @classmethod
     def serialize_hash(cls, _hash):
