@@ -8,9 +8,9 @@ from serializer import BlockSerializer, TransactionSerializer
 
 
 API_ENDPOINT_BLOCK = '/block/<height>'
-API_ENDPOINT_BLOCK_LIST = '/block/list'
+API_ENDPOINT_BLOCK_LIST = '/block/list?start=<start>&end=<end>'
 API_ENDPOINT_TRANSACTION = '/transaction/<_hash>'
-API_ENDPOINT_TRANSACTION_LIST = '/transaction/list'
+API_ENDPOINT_TRANSACTION_LIST = '/transaction/list?start=<start>&end=<end>'
 BLOCKSCI_PARSER_FILES_LOC = os.getenv('BLOCKSCI_PARSER_FILES_LOC')
 
 blockchain = blocksci.Blockchain(BLOCKSCI_PARSER_FILES_LOC)
@@ -45,10 +45,6 @@ def serve_block(height):
     """
     returns a json serialized blocksci.Block object
 
-    ------------------------
-    Parameters passed in URL
-    ------------------------
-
     param: height (int)
         block height
     """
@@ -63,21 +59,15 @@ def serve_block(height):
 
 
 @app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
-def serve_block_list():
+def serve_block_list(start, end):
     """
     returns a list of json serialized blocksci.Block objects
-
-    ---------------------------------
-    Parameters passed in Request Body
-    ---------------------------------
 
     param: start (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     param: end (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     """
-    start, end = request.values.get('start'), request.values.get('end')
-
     if start is None or end is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
@@ -93,10 +83,6 @@ def serve_transaction(_hash):
     """
     returns a json serialized blocksci.Tx object
 
-    ------------------------
-    Parameters passed in URL
-    ------------------------
-
     param: _hash (str)
         Transaction Hash
     """
@@ -111,21 +97,15 @@ def serve_transaction(_hash):
 
 
 @app.route(API_ENDPOINT_TRANSACTION_LIST, methods=['GET'])
-def serve_transaction_list():
+def serve_transaction_list(start, end):
     """
     returns a list of json serialized blocksci.Tx objects
-
-    ---------------------------------
-    Parameters passed in Request Body
-    ---------------------------------
 
     param: start (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     param: end (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     """
-    start, end = request.values.get('start'), request.values.get('end')
-
     if start is None or end is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
