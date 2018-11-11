@@ -8,9 +8,9 @@ from serializer import BlockSerializer, TransactionSerializer
 
 
 API_ENDPOINT_BLOCK = '/block/<height>'
-API_ENDPOINT_BLOCK_LIST = '/block/list?start=<start>&end=<end>'
+API_ENDPOINT_BLOCK_LIST = '/block/list'
 API_ENDPOINT_TRANSACTION = '/transaction/<_hash>'
-API_ENDPOINT_TRANSACTION_LIST = '/transaction/list?start=<start>&end=<end>'
+API_ENDPOINT_TRANSACTION_LIST = '/transaction/list'
 BLOCKSCI_PARSER_FILES_LOC = os.getenv('BLOCKSCI_PARSER_FILES_LOC')
 
 blockchain = blocksci.Blockchain(BLOCKSCI_PARSER_FILES_LOC)
@@ -59,7 +59,7 @@ def serve_block(height):
 
 
 @app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
-def serve_block_list(start, end):
+def serve_block_list():
     """
     returns a list of json serialized blocksci.Block objects
 
@@ -68,6 +68,8 @@ def serve_block_list(start, end):
     param: end (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     """
+    start, end = request.args.get('start'), request.args.get('end')
+
     if start is None or end is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
@@ -97,7 +99,7 @@ def serve_transaction(_hash):
 
 
 @app.route(API_ENDPOINT_TRANSACTION_LIST, methods=['GET'])
-def serve_transaction_list(start, end):
+def serve_transaction_list():
     """
     returns a list of json serialized blocksci.Tx objects
 
@@ -106,6 +108,8 @@ def serve_transaction_list(start, end):
     param: end (int, str)
         block height or a string which can be parsed to a datetime.datetime object
     """
+    start, end = request.args.get('start'), request.args.get('end')
+
     if start is None or end is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
