@@ -125,7 +125,7 @@ def serve_block_list():
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        serialized_blocks = [BlockSerializer.serialize(_block) for _block in blocks])
+        serialized_blocks = [BlockSerializer.serialize(_block) for _block in blocks]
         txes = [_serialized_block.txes for _serialized_block in serialized_blocks for _tx in _serialized_block.txes]
         # 2 for loops are present in order to flatten list of list to a list
         return jsonify(data=txes)
