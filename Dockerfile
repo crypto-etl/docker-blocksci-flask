@@ -2,16 +2,19 @@
 FROM merklescience/docker-blocksci 
 MAINTAINER Nirmal AK <nirmal@merklescience.com>
 
+WORKDIR /app
+
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-RUN mkdir /app && \
-    chmod +x entrypoint.sh
+COPY docker-entrypoint.sh /usr/bin/
+
+RUN chmod +x /usr/bin/docker-entrypoint.sh
 
 COPY . /app
 
-WORKDIR /app
-
 RUN pip3 install flask==1.0.2 gunicorn==19.9.0
 
-CMD ['./entrypoint.sh']
+ENTRYPOINT ["/bin/bash"]
+
+CMD ["/usr/bin/docker-entrypoint.sh"]
