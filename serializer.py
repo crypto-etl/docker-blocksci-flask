@@ -133,6 +133,10 @@ class TransactionSerializer(BaseSerializer):
         return _method()
 
     @classmethod
+    def serialize_change_output(cls, _change_output):
+        return TransactionInputOutputSerializer.serialize(_change_output)
+
+    @classmethod
     def serialize_inputs(cls, _inputs):
         return [TransactionInputOutputSerializer.serialize(_input) for _input in _inputs]
 
