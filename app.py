@@ -1,3 +1,4 @@
+import requests
 from datetime import datetime
 from flask import Flask, jsonify, request
 
@@ -81,7 +82,7 @@ def serve_block_list():
         return jsonify(data=str(e))
 
 
-@app.route('/transactions/<_hash>', methods=['GET'])
+@app.route('/transaction/<_hash>', methods=['GET'])
 def serve_transaction(_hash):
     """
     returns a json serialized blocksci.Tx object
@@ -100,4 +101,30 @@ def serve_transaction(_hash):
         tx = blockchain.tx_with_hash(_hash)
         return jsonify(data=TransactionSerializer.serialize(tx))
     except RuntimeError:
+        return jsonify(data=str(e))
+
+
+@app.route('/transaction/list', methods=['GET'])
+def serve_block_list():
+    """
+    returns a list of json serialized blocksci.Tx objects
+
+    ---------------------------------
+    Parameters passed in Request Body
+    ---------------------------------
+
+    param: start (int, str)
+        block height or a string which can be parsed to a datetime.datetime object
+    param: end (int, str)
+        block height or a string which can be parsed to a datetime.datetime object
+    """
+    start, end = request.values.get('start'), request.values.get('end')
+
+    if start is None or end is None:
+        return jsonify(data='`start` and `end` arguments must be passed in request data')
+
+    try:
+        data = requests.get('/block/list', body={'start': start, 'end': end})
+        return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
+    except (IndexError, ValueError) as e:
         return jsonify(data=str(e))
