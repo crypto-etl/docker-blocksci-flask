@@ -1,5 +1,5 @@
 #Create our image from Ubuntu 16.04 Xenial Distribution
-FROM merklescience/docker-blocksci 
+FROM allenday/blocksci-docker:v0.6
 MAINTAINER Nirmal AK <nirmal@merklescience.com>
 
 WORKDIR /app
