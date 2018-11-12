@@ -1,7 +1,12 @@
 import unittest
 from mock import Mock
 
-from serializer import BlockSerializer, TransactionSerializer
+from serializer import (
+    TransactionInputSerializer, 
+    TransactionOutputSerializer, 
+    BlockSerializer, 
+    TransactionSerializer
+)
 
 
 class TestAddressSerializer(unittest.TestCase):
@@ -84,6 +89,17 @@ class TestAddressSerializer(unittest.TestCase):
         txn.virtual_size = 134
         txn.weight = 536
         return txn
+
+    def test_txn_input(self):
+        inpt = TransactionInputSerializer(self.input)
+        self.assertEquals(inpt.address, "1BNwxHGaFbeUBitpjy2AsKpJ29Ybxntqvb")
+        self.assertEquals(inpt.address_type, "Pay to pubkey hash")
+        self.assertEquals(inpt.age, 941)
+        self.assertEquals(inpt.block, 100000)
+        self.assertEquals(inpt.sequence_num, 4294967295)
+        self.assertEquals(inpt.spent_tx, "87a157f3fd88ac7907c05fc55e271dc4acdc5605d187d646604ca8c0e9382e03")
+        self.assertEquals(inpt.tx, "fff2525b8931402dd09222c50775608f75787bd2b87e56995a7bdd30f79702c4")
+        self.assertEquals(inpt.value, 5000000000)
 
     # def _setup_block(self):
     #   base_size":215
