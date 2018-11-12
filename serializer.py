@@ -104,10 +104,8 @@ class TransactionSerializer(BaseSerializer):
     """
     Converts a blocksci.Tx object to a dictionary.
 
-    All fields available in a Tx instance (except include_output_of_type, outs,
-    ins, time_seen, block and observed_in_mempool) are available on the returned dictionary
-
-    Field definitions can be found at https://citp.github.io/BlockSci/reference/chain/tx.html
+    Field definitions can be found at
+    https://citp.github.io/BlockSci/reference/chain/tx.html
     """
     attributes = (
         'base_size',
@@ -166,10 +164,8 @@ class BlockSerializer(BaseSerializer):
     """
     Converts a blocksci.Block object to a dictionary.
 
-    All fields available in a block instance (except time_seen, next_block, prev_block
-    , inputs, outputs, miner and net_full_type_value) are available on the returned dictionary
-
-    Field definitions can be found at https://citp.github.io/BlockSci/reference/chain/block.html
+    Field definitions can be found at
+    https://citp.github.io/BlockSci/reference/chain/block.html
     """
 
     attributes = (
