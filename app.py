@@ -94,7 +94,7 @@ def serve_transaction(_hash):
     try:
         tx = blockchain.tx_with_hash(_hash)
         return jsonify(data=TransactionSerializer.serialize(tx))
-    except RuntimeError:
+    except RuntimeError as e:
         return jsonify(data=str(e))
 
 

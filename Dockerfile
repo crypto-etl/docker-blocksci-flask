@@ -13,7 +13,7 @@ RUN chmod +x /usr/bin/docker-entrypoint.sh
 
 COPY . /app
 
-RUN pip3 install flask==1.0.2 gunicorn==19.9.0
+RUN pip3 install flask==1.0.2 gunicorn==19.9.0 mock==2.0.0
 
 ENTRYPOINT ["/bin/bash"]
 

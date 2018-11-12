@@ -25,14 +25,12 @@ class BaseSerializer(object):
 
     @classmethod
     def serialize_address(cls, _address):
-        if _address.type == blocksci.address_type.nulldata:
-            return
-        elif _address.type in (blocksci.address_type.pubkey,
-                              blocksci.address_type.pubkeyhash,
-                              blocksci.address_type.witness_pubkeyhash,
-                              blocksci.address_type.scripthash,
-                              blocksci.address_type.witness_scripthash
-                              ):
+        if _address.type in (blocksci.address_type.pubkey,
+                            blocksci.address_type.pubkeyhash,
+                            blocksci.address_type.witness_pubkeyhash,
+                            blocksci.address_type.scripthash,
+                            blocksci.address_type.witness_scripthash
+                            ):
             return str(_address.address_string)
         elif _address.type == blocksci.address_type.multisig:
             return [str(_add.address_string) for _add in _address.addresses]
