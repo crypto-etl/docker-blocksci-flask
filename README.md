@@ -23,7 +23,7 @@ Use block-heights to define range
 curl -G -d "start=1" -d "end=2"  ip_address:8888/block/list
 
 Use block-times to define range
-curl -G -d "start=2015-10-01" -d "end=2015-10-02"  ip_address:8888/block/list
+curl -G  ip_address:8888/block/list -d "start=2010-10-01" -d "end=2010-10-02"
 ```
 
 ### 3. /transaction/
@@ -39,5 +39,5 @@ Use block-heights to define range
 curl -G -d "start=1" -d "end=2"  ip_address:8888/transaction/list
 
 Use block-times to define range
-curl -G -d "start=2015-10-01" -d "end=2015-10-02"  ip_address:8888/transaction/list
+curl -G  ip_address:8888/transaction/list -d "start=2010-10-01" -d "end=2010-10-02"
 ```
