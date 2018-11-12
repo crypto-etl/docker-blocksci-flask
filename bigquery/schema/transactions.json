@@ -1,0 +1,250 @@
+[
+    {
+        "name": "base_size",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "block_height",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "block_time",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "change_output",
+        "type": "RECORD",
+        "fields": [
+            {
+                "name": "address",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "address_type",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "block",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "is_spent",
+                "type": "BOOLEAN",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "spending_tx",
+                "type": "STRING"
+            },
+            {
+                "name": "tx",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "value",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            }
+        ]
+    },
+    {
+        "name": "fee",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "fee_per_byte",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "hash",
+        "type": "STRING",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "input_count",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "input_value",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "inputs",
+        "type": "RECORD",
+        "mode": "REPEATED",
+        "fields": [
+            {
+                "name": "address",
+                "type": "STRING"
+            },
+            {
+                "name": "address_type",
+                "type": "STRING"
+            },
+            {
+                "name": "age",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "block",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "sequence_num",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "spent_tx",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "tx",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "value",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            }
+        ]
+    },
+    {
+        "name": "is_coinbase",
+        "type": "BOOLEAN",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "locktime",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "op_return",
+        "type": "RECORD",
+        "fields": [
+            {
+                "name": "address",
+                "type": "STRING"
+            },
+            {
+                "name": "address_type",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "block",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "is_spent",
+                "type": "BOOLEAN",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "spending_tx",
+                "type": "STRING"
+            },
+            {
+                "name": "tx",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "value",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            }
+        ]
+    },
+    {
+        "name": "output_count",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "output_value",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "outputs",
+        "type": "RECORD",
+        "mode": "REPEATED",
+        "fields": [
+            {
+                "name": "address",
+                "type": "STRING"
+            },
+            {
+                "name": "address_type",
+                "type": "STRING"
+            },
+            {
+                "name": "block",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "is_spent",
+                "type": "BOOLEAN",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "spending_tx",
+                "type": "STRING"
+            },
+            {
+                "name": "tx",
+                "type": "STRING",
+                "mode": "REQUIRED"
+            },
+            {
+                "name": "value",
+                "type": "INTEGER",
+                "mode": "REQUIRED"
+            }
+        ]
+    },
+    {
+        "name": "size_bytes",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "total_size",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "virtual_size",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "weight",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    }
+]
