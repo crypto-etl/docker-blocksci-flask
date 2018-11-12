@@ -13,7 +13,7 @@ class TestAddressSerializer(unittest.TestCase):
 
     def setUp(self):
         self.pubkey_address = self._setup_pubkey()
-        self.nulldata_address = self._nulldata_address()
+        self.nulldata_address = self._setup_nulldata_address()
         self.txn_input = self._setup_txn_input()
         self.txn_outputs = self._setup_txn_outputs()
         self.txn_output = self.txn_outputs[0]
@@ -46,7 +46,8 @@ class TestAddressSerializer(unittest.TestCase):
         return txn_input
 
     def _setup_txn_outputs(self):
-        txn_output_1.address = "1JqDybm2nWTENrHvMyafbSXXtTk5Uv5QAn",
+        txn_output_1 = Mock()        
+        txn_output_1.address = "1JqDybm2nWTENrHvMyafbSXXtTk5Uv5QAn"
         txn_output_1.address_type = "Pay to pubkey hash"
         txn_output_1.block = 100000
         txn_output_1.is_spent = True
@@ -55,7 +56,8 @@ class TestAddressSerializer(unittest.TestCase):
         txn_output_1.type = "tx-output"
         txn_output_1.value = 556000000
 
-        txn_output_2.address = "1EYTGtG4LnFfiMvjJdsU7GMGCQvsRSjYhx",
+        txn_output_2 = Mock()        
+        txn_output_2.address = "1EYTGtG4LnFfiMvjJdsU7GMGCQvsRSjYhx"
         txn_output_2.address_type = "Pay to pubkey hash"
         txn_output_2.block = 100000
         txn_output_2.is_spent = True
@@ -91,7 +93,7 @@ class TestAddressSerializer(unittest.TestCase):
         return txn
 
     def test_txn_input(self):
-        inpt = TransactionInputSerializer(self.input)
+        inpt = TransactionInputSerializer.serialize(self.txn_input)
         self.assertEquals(inpt.address, "1BNwxHGaFbeUBitpjy2AsKpJ29Ybxntqvb")
         self.assertEquals(inpt.address_type, "Pay to pubkey hash")
         self.assertEquals(inpt.age, 941)

@@ -52,12 +52,6 @@ class BaseTransactionInputOutputSerializer(BaseSerializer):
     def serialize_tx(cls, _tx):
         return str(_tx.hash)
 
-    @classmethod
-    def serialize(cls, obj):
-        payload = super().serialize(obj)
-        payload['type'] = 'tx-output' if isinstance(obj, blocksci.Output) else 'tx-input'
-        return payload
-
 
 class TransactionInputSerializer(BaseTransactionInputOutputSerializer):
     """
