@@ -44,7 +44,15 @@ curl -G  http://0.0.0.0:5000/transaction/list -d "start=2010-10-01" -d "end=2010
 
 ## Preparing output for load to bigquery
 
-If we have one `block` JSON payload from server per line, clean it like this:
+If we have `block` JSON payloads from server, one per line, clean it like this:
 ```
-cat dirty.json | perl -ne 's/^{"data":\[//;s/\]}$//;print' | jq -cr 'del(.txes, .inputs, .change_output, .coinbase_tx.inputs, .coinbase_tx.op_return, .coinbase_tx.change_output)' | perl -ne 's/ \+0000//g;print' > clean.json
+cat dirtyblock.json | perl -ne 's/^{"data":\[//;s/\]}$//;print' | jq -cr 'del(.txes, .inputs, .change_output, .coinbase_tx.inputs, .coinbase_tx.op_return, .coinbase_tx.change_output)' | perl -ne 's/ \+0000//g;print' > cleanblock.json
+bq load --replace --source_format NEWLINE_DELIMITED_JSON dataset.blocktable cleanblock.json bigquery/schema/blocks.json
+```
+
+If we have `transaction` JSON payloads from server, one per line, clean it like this:
+```
+cat dirtytx.json | perl -ne 's/^{"data":\[//;s/\]}$//;s/ \+0000//g;print' > cleantx.json
+bq load --replace --source_format NEWLINE_DELIMITED_JSON dataset.txtable cleantx.json bigquery/schema/transactions.json
+
 ```
