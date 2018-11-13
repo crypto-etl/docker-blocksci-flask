@@ -41,3 +41,10 @@ curl -G -d "start=1" -d "end=2"  ip_address:8888/transaction/list
 Use block-times to define range
 curl -G  ip_address:8888/transaction/list -d "start=2010-10-01" -d "end=2010-10-02"
 ```
+
+## Preparing output for load to bigquery
+
+If we have one `block` JSON payload from server per line, clean it like this:
+```
+cat dirty.json | perl -ne 's/^{"data":\[//;s/\]}$//;print' | jq -cr 'del(.txes, .inputs, .change_output, .coinbase_tx.inputs, .coinbase_tx.op_return, .coinbase_tx.change_output)' | perl -ne 's/ \+0000//g;print' > clean.json
+```
