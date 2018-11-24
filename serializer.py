@@ -184,7 +184,7 @@ class BlockSerializer(BaseSerializer):
         'revenue',
         'size_bytes',
         'time',
-        'time_seen',
+        # 'time_seen',
         'timestamp',
         'total_size',
         'tx_count',
