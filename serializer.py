@@ -188,7 +188,7 @@ class BlockSerializer(BaseSerializer):
         'timestamp',
         'total_size',
         'tx_count',
-        'txes',
+        # 'txes',
         'version',
         'virtual_size',
         'weight',

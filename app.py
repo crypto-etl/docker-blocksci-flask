@@ -31,12 +31,12 @@ def get_blockrange(start, end):
     if start.isdigit() and end.isdigit():
         start, end = int(start), int(end)
         blocks = blockchain[start:end]  #  Blocksci does not raise an IndexError in case slice indexes are out of range
-    elif isinstance(start, str) and isinstance(end, str):
+    elif isinstance(start, str) and (end is None or isinstance(end, str)):
         try:
             blocks = blockchain.range(start=start, end=end)
         except IndexError:
             # Blocksci raises an IndexError in case start end_date is before date of genesis block
-            raise IndexError('End Date for range is prior to Genesis block')
+            raise IndexError('End Date or Start Date for range is prior to Genesis block')
     else:
         raise ValueError('Allowed Values for `start` and `end` are `integers` and `date strings`')
     return blocks
@@ -57,7 +57,7 @@ def serve_block(height):
         return jsonify(data='Invalid argument: Block at given Height not found')
 
     block = blockchain[int(height)]
-    return jsonify(data=BlockSerializer.serialize(block))
+    return jsonify(BlockSerializer.serialize(block))
 
 
 @app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
@@ -77,9 +77,9 @@ def serve_block_list():
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
+        return jsonify([BlockSerializer.serialize(_block) for _block in blocks])
     except (IndexError, ValueError) as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
 
 
 @app.route(API_ENDPOINT_TRANSACTION, methods=['GET'])
@@ -95,9 +95,9 @@ def serve_transaction(_hash):
 
     try:
         tx = blockchain.tx_with_hash(_hash)
-        return jsonify(data=TransactionSerializer.serialize(tx))
+        return jsonify(TransactionSerializer.serialize(tx))
     except RuntimeError as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
 
 
 @app.route(API_ENDPOINT_TRANSACTION_LIST, methods=['GET'])
@@ -113,13 +113,13 @@ def serve_transaction_list():
     start, end = request.args.get('start'), request.args.get('end')
 
     if start is None or end is None:
-        return jsonify(data='`start` and `end` arguments must be passed in request data')
+        return jsonify('`start` and `end` arguments must be passed in request data')
 
     try:
         blocks = get_blockrange(start=start, end=end)
         serialized_blocks = [BlockSerializer.serialize(_block) for _block in blocks]
         txes = [_tx for _serialized_block in serialized_blocks for _tx in _serialized_block['txes']]
         # 2 for loops are present in order to flatten list of list to a list
-        return jsonify(data=txes)
+        return jsonify(txes)
     except (IndexError, ValueError) as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
