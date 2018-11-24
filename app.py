@@ -57,7 +57,7 @@ def serve_block(height):
         return jsonify('Invalid argument: Block at given Height not found')
 
     block = blockchain[int(height)]
-    return jsonify(BlockSerializer.serialize(block))
+    return BlockSerializer.serialize(block)
 
 
 @app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
@@ -77,7 +77,7 @@ def serve_block_list():
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        return jsonify([BlockSerializer.serialize(_block) for _block in blocks])
+        return [BlockSerializer.serialize(_block) for _block in blocks]
     except (IndexError, ValueError) as e:
         return jsonify(str(e))
 
