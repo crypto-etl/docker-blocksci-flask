@@ -72,7 +72,7 @@ def serve_block_list():
     """
     start, end = request.args.get('start'), request.args.get('end')
 
-    if start is None or end is None:
+    if start is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
     try:
@@ -112,7 +112,7 @@ def serve_transaction_list():
     """
     start, end = request.args.get('start'), request.args.get('end')
 
-    if start is None or end is None:
+    if start is None:
         return jsonify(data='`start` and `end` arguments must be passed in request data')
 
     try:
