@@ -7,10 +7,10 @@ import blocksci
 from serializer import BlockSerializer, TransactionSerializer
 
 
-API_ENDPOINT_BLOCK = '/block/<height>'
-API_ENDPOINT_BLOCK_LIST = '/block/list'
-API_ENDPOINT_TRANSACTION = '/transaction/<_hash>'
-API_ENDPOINT_TRANSACTION_LIST = '/transaction/list'
+API_ENDPOINT_BLOCK = '/blocks/<height>'
+API_ENDPOINT_BLOCK_LIST = '/blocks/list'
+API_ENDPOINT_TRANSACTION = '/transactions/<_hash>'
+API_ENDPOINT_TRANSACTION_LIST = '/transactions/list'
 BLOCKSCI_PARSER_FILES_LOC = os.getenv('BLOCKSCI_PARSER_FILES_LOC')
 
 blockchain = blocksci.Blockchain(BLOCKSCI_PARSER_FILES_LOC)
