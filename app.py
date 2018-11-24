@@ -51,13 +51,13 @@ def serve_block(height):
         block height
     """
     if not height.isdigit():
-        return jsonify(data='Invalid argument: Block Height must be an integer')
+        return jsonify('Invalid argument: Block Height must be an integer')
 
     if int(height) > len(blockchain) - 1:
-        return jsonify(data='Invalid argument: Block at given Height not found')
+        return jsonify('Invalid argument: Block at given Height not found')
 
     block = blockchain[int(height)]
-    return jsonify(data=BlockSerializer.serialize(block))
+    return jsonify(BlockSerializer.serialize(block))
 
 
 @app.route(API_ENDPOINT_BLOCK_LIST, methods=['GET'])
@@ -73,13 +73,13 @@ def serve_block_list():
     start, end = request.args.get('start'), request.args.get('end')
 
     if start is None:
-        return jsonify(data='`start` and `end` arguments must be passed in request data')
+        return jsonify('`start` and `end` arguments must be passed in request data')
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        return jsonify(data=[BlockSerializer.serialize(_block) for _block in blocks])
+        return jsonify([BlockSerializer.serialize(_block) for _block in blocks])
     except (IndexError, ValueError) as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
 
 
 @app.route(API_ENDPOINT_TRANSACTION, methods=['GET'])
@@ -91,13 +91,13 @@ def serve_transaction(_hash):
         Transaction Hash
     """
     if len(_hash) != 64:
-        return jsonify(data='Invalid argument: TxHash must be 64 chars')
+        return jsonify('Invalid argument: TxHash must be 64 chars')
 
     try:
         tx = blockchain.tx_with_hash(_hash)
-        return jsonify(data=TransactionSerializer.serialize(tx))
+        return jsonify(TransactionSerializer.serialize(tx))
     except RuntimeError as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
 
 
 @app.route(API_ENDPOINT_TRANSACTION_LIST, methods=['GET'])
@@ -113,13 +113,13 @@ def serve_transaction_list():
     start, end = request.args.get('start'), request.args.get('end')
 
     if start is None:
-        return jsonify(data='`start` and `end` arguments must be passed in request data')
+        return jsonify('`start` and `end` arguments must be passed in request data')
 
     try:
         blocks = get_blockrange(start=start, end=end)
         serialized_blocks = [BlockSerializer.serialize(_block) for _block in blocks]
         txes = [_tx for _serialized_block in serialized_blocks for _tx in _serialized_block['txes']]
         # 2 for loops are present in order to flatten list of list to a list
-        return jsonify(data=txes)
+        return jsonify(txes)
     except (IndexError, ValueError) as e:
-        return jsonify(data=str(e))
+        return jsonify(str(e))
