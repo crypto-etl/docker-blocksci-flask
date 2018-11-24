@@ -117,9 +117,9 @@ def serve_transaction_list():
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        
+
         lists_txes = [_block.txes for _block in blocks]
-        txes = [_tx for list_txes in lists_txes for _tx in list_txes]
+        txes = [TransactionSerializer.serialize(_tx) for list_txes in lists_txes for _tx in list_txes]
         # 2 for loops are present in order to flatten list of list to a list
         return jsonify(txes)
     except (IndexError, ValueError) as e:
