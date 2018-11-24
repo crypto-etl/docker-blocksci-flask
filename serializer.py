@@ -145,11 +145,11 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_inputs(cls, _inputs):
-        return [TransactionInputSerializer.serialize(_input) for _input in _inputs] if len(_inputs) > 1 else []
+        return [TransactionInputSerializer.serialize(_input) for _input in _inputs] if len(_inputs) >= 1 else []
 
     @classmethod
     def serialize_outputs(cls, _outputs):
-        return [TransactionOutputSerializer.serialize(_output) for _output in _outputs] if len(_outputs) > 1 else []
+        return [TransactionOutputSerializer.serialize(_output) for _output in _outputs] if len(_outputs) >= 1 else []
 
     @classmethod
     def serialize_hash(cls, _hash):
@@ -208,7 +208,7 @@ class BlockSerializer(BaseSerializer):
 
     @classmethod
     def serialize_txes(cls, _txes):
-        return [TransactionSerializer.serialize(_tx) for _tx in _txes] if _txes else []
+        return [TransactionSerializer.serialize(_tx) for _tx in _txes] if len(_txes) >= 1 else []
 
     @classmethod
     def serialize_coinbase_param(cls, _coinbase_param):
