@@ -51,10 +51,10 @@ def serve_block(height):
         block height
     """
     if not height.isdigit():
-        return jsonify(data='Invalid argument: Block Height must be an integer')
+        return jsonify('Invalid argument: Block Height must be an integer')
 
     if int(height) > len(blockchain) - 1:
-        return jsonify(data='Invalid argument: Block at given Height not found')
+        return jsonify('Invalid argument: Block at given Height not found')
 
     block = blockchain[int(height)]
     return jsonify(BlockSerializer.serialize(block))
@@ -73,7 +73,7 @@ def serve_block_list():
     start, end = request.args.get('start'), request.args.get('end')
 
     if start is None:
-        return jsonify(data='`start` and `end` arguments must be passed in request data')
+        return jsonify('`start` and `end` arguments must be passed in request data')
 
     try:
         blocks = get_blockrange(start=start, end=end)
@@ -91,7 +91,7 @@ def serve_transaction(_hash):
         Transaction Hash
     """
     if len(_hash) != 64:
-        return jsonify(data='Invalid argument: TxHash must be 64 chars')
+        return jsonify('Invalid argument: TxHash must be 64 chars')
 
     try:
         tx = blockchain.tx_with_hash(_hash)
@@ -113,7 +113,7 @@ def serve_transaction_list():
     start, end = request.args.get('start'), request.args.get('end')
 
     if start is None:
-        return jsonify(data='`start` and `end` arguments must be passed in request data')
+        return jsonify('`start` and `end` arguments must be passed in request data')
 
     try:
         blocks = get_blockrange(start=start, end=end)
