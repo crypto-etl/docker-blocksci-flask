@@ -31,12 +31,12 @@ def get_blockrange(start, end):
     if start.isdigit() and end.isdigit():
         start, end = int(start), int(end)
         blocks = blockchain[start:end]  #  Blocksci does not raise an IndexError in case slice indexes are out of range
-    elif isinstance(start, str) and isinstance(end, str):
+    elif isinstance(start, str) and (end is None or isinstance(end, str)):
         try:
             blocks = blockchain.range(start=start, end=end)
         except IndexError:
             # Blocksci raises an IndexError in case start end_date is before date of genesis block
-            raise IndexError('End Date for range is prior to Genesis block')
+            raise IndexError('End Date or Start Date for range is prior to Genesis block')
     else:
         raise ValueError('Allowed Values for `start` and `end` are `integers` and `date strings`')
     return blocks
