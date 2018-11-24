@@ -117,9 +117,7 @@ def serve_transaction_list():
 
     try:
         blocks = get_blockrange(start=start, end=end)
-        serialized_blocks = [_block.txes for _block in blocks]
-        txes = [_tx for _serialized_block in serialized_blocks for _tx in _serialized_block['txes']]
-
+        
         lists_txes = [_block.txes for _block in blocks]
         txes = [_tx for list_txes in lists_txes for _tx in list_txes]
         # 2 for loops are present in order to flatten list of list to a list
