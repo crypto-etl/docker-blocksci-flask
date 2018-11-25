@@ -31,9 +31,9 @@ class BaseSerializer(object):
                             blocksci.address_type.scripthash,
                             blocksci.address_type.witness_scripthash
                             ):
-            return [{'address_string': str(_address.address_string), 'address_type': str(_address.address_type)},]
+            return [{'address_string': str(_address.address_string), 'address_type': str(_address.type)},]
         elif _address.type == blocksci.address_type.multisig:
-            return [{'address_string': str(_address.address_string), 'address_type': str(_address.address_type)} 
+            return [{'address_string': str(_address.address_string), 'address_type': str(_address.type)} 
                     for _address in _address.addresses]
         else:
             return []
