@@ -31,11 +31,11 @@ class BaseSerializer(object):
                             blocksci.address_type.scripthash,
                             blocksci.address_type.witness_scripthash
                             ):
-            return str(_address.address_string)
+            return [str(_address.address_string),]
         elif _address.type == blocksci.address_type.multisig:
             return [str(_add.address_string) for _add in _address.addresses]
         else:
-            return
+            return []
 
     @classmethod
     def serialize_address_type(cls, _address_type):
