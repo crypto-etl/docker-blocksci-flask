@@ -3,6 +3,7 @@ FROM allenday/blocksci-docker:v0.6
 MAINTAINER Nirmal AK <nirmal@merklescience.com>
 
 WORKDIR /app
+# Commit Hash for Latest Release - 84e4b604151d5e000f941a1135849ab1b5648cd2
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8

@@ -28,7 +28,7 @@ def filter_blocks_by_datetime(start_time, end_time):
     """
     start_time = parser.parse(start_time).replace(tzinfo=pytz.utc)
     end_time = parser.parse(end_time).replace(tzinfo=pytz.utc)
-    return blockchain.filter_blocks(lambda block: block.time >= start_time and block.time < end_start)
+    return blockchain.filter_blocks(lambda block: block.time >= start_time and block.time < end_time)
 
 
 def get_blockrange(start, end):
