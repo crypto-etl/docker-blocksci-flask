@@ -1,6 +1,8 @@
 import os
+import pytz
 import requests
 from datetime import datetime
+from dateutil import parser
 from flask import Flask, jsonify, request
 
 import blocksci
@@ -18,6 +20,17 @@ blockchain = blocksci.Blockchain(BLOCKSCI_PARSER_FILES_LOC)
 app = Flask(__name__)
 
 
+def filter_blocks_by_datetime(start_time, end_time):
+    """
+    Returns a list of blocks where `block_time` is 
+    greater than or equal to start_time and
+    less than end_time
+    """
+    start_time = parser.parse(start_time).replace(tzinfo=pytz.utc)
+    end_time = parser.parse(end_time).replace(tzinfo=pytz.utc)
+    return blockchain.filter_blocks(lambda block: block.time >= start_time and block.time < end_start)
+
+
 def get_blockrange(start, end):
     """
     returns a blocksci.BlockIterator with blocks within the
@@ -28,17 +41,19 @@ def get_blockrange(start, end):
     param: end (int, str)
         block height or block times
     """
-    if start.isdigit() and end.isdigit():
-        start, end = int(start), int(end)
-        blocks = blockchain[start:end]  #  Blocksci does not raise an IndexError in case slice indexes are out of range
-    elif isinstance(start, str) and (end is None or isinstance(end, str)):
-        try:
-            blocks = blockchain.range(start=start, end=end)
-        except IndexError:
-            # Blocksci raises an IndexError in case start end_date is before date of genesis block
-            raise IndexError('End Date or Start Date for range is prior to Genesis block')
-    else:
-        raise ValueError('Allowed Values for `start` and `end` are `integers` and `date strings`')
+    try:
+        if start.isdigit() and end.isdigit():
+            start, end = int(start), int(end)
+            blocks = blockchain[start:end]  #  Blocksci does not raise an IndexError in case slice indexes are out of range
+        elif isinstance(start, str) and end is None:
+            blocks = blockchain.range(start=start)
+        elif isinstance(start, str) and isinstance(end, str): 
+            blocks = filter_blocks_by_datetime(start_time=start, end_time=end)
+        else:
+            raise ValueError('Allowed Values for `start` and `end` are `integers` and `date strings`')
+    except IndexError:
+        # Blocksci raises an IndexError in case start end_date is before date of genesis block
+        raise IndexError('End Date or Start Date for range is prior to Genesis block')
     return blocks
 
 
