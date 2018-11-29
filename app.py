@@ -1,5 +1,4 @@
 import os
-import pytz
 import requests
 from datetime import datetime
 from dateutil import parser
@@ -26,8 +25,8 @@ def filter_blocks_by_datetime(start_time, end_time):
     greater than or equal to start_time and
     less than end_time
     """
-    start_time = parser.parse(start_time).replace(tzinfo=pytz.utc)
-    end_time = parser.parse(end_time).replace(tzinfo=pytz.utc)
+    start_time = parser.parse(start_time)
+    end_time = parser.parse(end_time)
     return blockchain.filter_blocks(lambda block: block.time >= start_time and block.time < end_time)
 
 
