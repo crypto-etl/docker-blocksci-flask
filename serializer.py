@@ -31,11 +31,12 @@ class BaseSerializer(object):
                             blocksci.address_type.scripthash,
                             blocksci.address_type.witness_scripthash
                             ):
-            return str(_address.address_string)
+            return [{'address_string': str(_address.address_string), 'address_type': str(_address.type)},]
         elif _address.type == blocksci.address_type.multisig:
-            return [str(_add.address_string) for _add in _address.addresses]
+            return [{'address_string': str(_address.address_string), 'address_type': str(_address.type)} 
+                    for _address in _address.addresses]
         else:
-            return
+            return []
 
     @classmethod
     def serialize_address_type(cls, _address_type):
@@ -74,7 +75,7 @@ class TransactionInputSerializer(BaseTransactionInputOutputSerializer):
 
     @classmethod
     def serialize_spent_tx(cls, _spent_tx):
-        return str(_spent_tx.hash) if _spent_tx else None
+        return str(_spent_tx.hash) if _spent_tx else ''
 
 
 class TransactionOutputSerializer(BaseTransactionInputOutputSerializer):
@@ -97,7 +98,7 @@ class TransactionOutputSerializer(BaseTransactionInputOutputSerializer):
 
     @classmethod
     def serialize_spending_tx(cls, _spending_tx):
-        return str(_spending_tx.hash) if _spending_tx else None
+        return str(_spending_tx.hash) if _spending_tx else ''
 
 
 class TransactionSerializer(BaseSerializer):
@@ -141,15 +142,15 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_change_output(cls, _change_output):
-        return TransactionOutputSerializer.serialize(_change_output) if _change_output else None
+        return TransactionOutputSerializer.serialize(_change_output) if _change_output else []
 
     @classmethod
     def serialize_inputs(cls, _inputs):
-        return [TransactionInputSerializer.serialize(_input) for _input in _inputs]
+        return [TransactionInputSerializer.serialize(_input) for _input in _inputs] if len(_inputs) >= 1 else []
 
     @classmethod
     def serialize_outputs(cls, _outputs):
-        return [TransactionOutputSerializer.serialize(_output) for _output in _outputs]
+        return [TransactionOutputSerializer.serialize(_output) for _output in _outputs] if len(_outputs) >= 1 else []
 
     @classmethod
     def serialize_hash(cls, _hash):
@@ -157,7 +158,7 @@ class TransactionSerializer(BaseSerializer):
 
     @classmethod
     def serialize_op_return(cls, _op_return):
-        return TransactionOutputSerializer.serialize(_op_return) if _op_return else None
+        return TransactionOutputSerializer.serialize(_op_return) if _op_return else []
 
 
 class BlockSerializer(BaseSerializer):
@@ -184,11 +185,11 @@ class BlockSerializer(BaseSerializer):
         'revenue',
         'size_bytes',
         'time',
-        'time_seen',
+        # 'time_seen',
         'timestamp',
         'total_size',
         'tx_count',
-        'txes',
+        # 'txes',
         'version',
         'virtual_size',
         'weight',
@@ -208,7 +209,7 @@ class BlockSerializer(BaseSerializer):
 
     @classmethod
     def serialize_txes(cls, _txes):
-        return [TransactionSerializer.serialize(_tx) for _tx in _txes]
+        return [TransactionSerializer.serialize(_tx) for _tx in _txes] if len(_txes) >= 1 else []
 
     @classmethod
     def serialize_coinbase_param(cls, _coinbase_param):
